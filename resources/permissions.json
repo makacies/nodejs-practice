@@ -1,0 +1,5 @@
+[{
+    "rule": "VIEW_PHOTOS",
+    "field": "login",
+    "match": "\\b(\\w*j.snow\\w*)\\b"
+}]

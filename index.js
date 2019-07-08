@@ -1,14 +1,13 @@
-const http = require('http');
+const statisticCollector = require('./statisticCollector.js');
+const permissionsConfig = require('./resources/permissions.json');
+const user = require('./resources/user.json');
+const { Auth } = require('./auth.js');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const statistic = statisticCollector.getPostsFrequency();
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
+console.log(statistic.postsPerDay);
+console.log(statistic.postsPerWeek);
+console.log(statistic.postsPerMonth);
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+const authenticator = new Auth(permissionsConfig); 
+console.log(authenticator.hasAccess('VIEW_PHOTOS', user));
