@@ -1,5 +1,10 @@
 [{
-    "rule": "VIEW_PHOTOS",
-    "field": "login",
-    "match": "\\b(\\w*j.snow\\w*)\\b"
+    "AUTH_VIEW_PHOTOS_FIELD": "login",
+    "AUTH_VIEW_PHOTOS_MATCH": "gmail.com$"
+}, {
+    "AUTH_COMMENT_POST_FIELD": "login",
+    "AUTH_COMMENT_POST_MATCH": "gmail.com$"
+}, {
+    "AUTH_DIRECT_MESSAGE_FIELD": "login",
+    "AUTH_DIRECT_MESSAGE_MATCH": "gmail.com$"
 }]
