@@ -1,0 +1,369 @@
+swagger: '2.0'
+info:
+  description: Blog api
+  version: 1.0.0
+  title: Blog
+tags:
+  - name: posts
+    description: Posts related operations
+  - name: user
+    description: Operations about user
+schemes:
+  - http
+paths:
+  /posts:
+    post:
+      tags:
+        - posts
+      summary: Add a new post to the store
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Post object that needs to be added to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        201:
+          $ref: "#/responses/creted"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+    get:
+      tags:
+        - posts
+      summary: Get all posts
+      produces:
+        - application/json
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Post'
+          description: Posts
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+  /posts/{id}:        
+    get:
+      tags:
+        - posts
+      summary: Get the post from the store
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/Post'
+          description: Post
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+    put:
+      tags:
+        - posts
+      summary: Update the post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Post'
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+    delete:
+      tags:
+        - posts
+      summary: Delete the post from the store
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+  /posts/{id}/comments:        
+    get:
+      tags:
+        - posts
+      summary: Get post comments
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comments'
+          description: ''
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+    post:
+      tags:
+        - posts
+      summary: Add comment to post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Comment'
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+  /user/{username}:
+    get:
+      tags:
+        - user
+      summary: Get the user by user name
+      produces:
+        - application/json
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/User'
+          description: Successful operation
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+    put:
+      tags:
+        - user
+      summary: Update the user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+    delete:
+      tags:
+        - user
+      summary: Delete the user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: username
+        in: path
+        description: The name that needs to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: string
+          headers:
+            X-Rate-Limit:
+              type: integer
+              format: int32
+              description: calls per hour allowed by the user
+            X-Expires-After:
+              type: string
+              format: date-time
+              description: date in UTC when token expires
+        '400':
+          description: Invalid username/password supplied
+  /user/logout:
+    get:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+  Post:
+    type: object
+    required:
+      - id
+      - createdAt
+      - postBody
+    properties:
+      id:
+        type: integer
+        format: int64
+      createdAt:
+        type: string
+        format: date
+      postBody:
+        type: string
+        example: doggie
+  Comment:
+    type: object
+    required:
+      - body
+      - createdAt
+    properties:
+      body:
+        type: string
+        format: I'm comment
+      createdAt:
+        type: string
+        format: date
+  Comments:
+    type: object
+    required:
+      - postId
+      - comments
+    properties:
+      postId:
+        type: string
+        format: uuid
+      comments:
+        type: array
+        items:
+          $ref: '#/definitions/Comment'
+responses:
+  ok:
+    description: 'Ok'
+  creted:
+    description: 'Created'
+  badRequest:
+    description: Bad Request
+    examples:
+      application/json:
+        - message: Payload violates Schema
+        - message: Payload Invalid
+  forbidden:
+    description: 'Forbidden'
+  notFound:
+    description: 'Not found'
