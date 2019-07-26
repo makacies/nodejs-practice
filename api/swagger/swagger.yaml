@@ -10,6 +10,8 @@ tags:
     description: Operations about user
   - name: auth
     description: User authentication
+  - name: statistic
+    description: Statistic
 schemes:
   - http
 paths:
@@ -290,21 +292,12 @@ paths:
           required: true
           type: string
       responses:
-        '200':
-          description: successful operation
+        200:
           schema:
-            type: string
-          headers:
-            X-Rate-Limit:
-              type: integer
-              format: int32
-              description: calls per hour allowed by the user
-            X-Expires-After:
-              type: string
-              format: date-time
-              description: date in UTC when token expires
-        '400':
-          description: Invalid username/password supplied
+            $ref: '#/definitions/User'
+          description: Successful operation
+        400:
+          $ref: '#/responses/badRequest'
   /logout:
     get:
       tags:
@@ -312,10 +305,27 @@ paths:
       summary: Logs out current logged in user session
       produces:
         - application/json
-      parameters: []
       responses:
-        default:
-          description: successful operation
+        200:
+          schema:
+            $ref: '#/definitions/User'
+          description: Successful operation
+        400:
+          $ref: '#/responses/badRequest'
+  /stats:
+    get:
+      tags:
+        - statistic
+      summary: Get posts and comments statistics
+      produces:
+        - application/json
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/Statistics'
+          description: Posts and comments statistics
+        400:
+          $ref: '#/responses/badRequest'
 definitions:
   User:
     type: object
@@ -376,6 +386,32 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Comment'
+  Statistics:
+    type: object
+    required:
+      - postsStats
+      - commentsStats
+    properties:
+      postsStats:
+        $ref: '#/definitions/Frequency'
+      commentsStats:
+        $ref: '#/definitions/Frequency'
+  Frequency:
+    type: object
+    required:
+      - perDay
+      - perWeek
+      - perMonth
+    properties:
+      perDay:
+        type: integer
+        format: int32
+      perWeek:
+        type: integer
+        format: int32
+      perMonth:
+        type: integer
+        format: int32
 responses:
   ok:
     description: 'Ok'

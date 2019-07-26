@@ -5,8 +5,7 @@ const { AUTH_COOKIE_NAME } = require('../constants.js');
 router.use(function timeLog(req, res, next) {
     if (req.cookies[AUTH_COOKIE_NAME]) {
         next();
-    }
-    res.status(403).send('Forbidden');
+    } else res.status(403).send('Forbidden');
 });
 
 router
