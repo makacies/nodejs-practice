@@ -6,5 +6,7 @@ module.exports = {
     
     POSTS_FILE_PATH: './src/resources/posts.json',
     USERS_FILE_PATH: './src/resources/users.json',
-    COMMENTS_FILE_PATH: './src/resources/comments.json'
+    COMMENTS_FILE_PATH: './src/resources/comments.json',
+
+    AUTH_COOKIE_NAME: 'blogCookie'
 };

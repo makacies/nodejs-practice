@@ -8,6 +8,8 @@ tags:
     description: Posts related operations
   - name: user
     description: Operations about user
+  - name: auth
+    description: User authentication
 schemes:
   - http
 paths:
@@ -57,7 +59,7 @@ paths:
     get:
       tags:
         - posts
-      summary: Get the post from the store
+      summary: Get post from the store
       produces:
         - application/json
       parameters:
@@ -81,7 +83,7 @@ paths:
     put:
       tags:
         - posts
-      summary: Update the post
+      summary: Update post
       consumes:
         - application/json
       produces:
@@ -108,7 +110,7 @@ paths:
     delete:
       tags:
         - posts
-      summary: Delete the post from the store
+      summary: Delete post from the store
       consumes:
         - application/json
       produces:
@@ -181,11 +183,33 @@ paths:
           $ref: '#/responses/badRequest'
         403:
           $ref: '#/responses/forbidden'
+    delete:
+      tags:
+        - posts
+      summary: Delete post comments
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
   /user/{username}:
     get:
       tags:
         - user
-      summary: Get the user by user name
+      summary: Get user by user name
       produces:
         - application/json
       parameters:
@@ -208,7 +232,7 @@ paths:
     put:
       tags:
         - user
-      summary: Update the user
+      summary: Update user
       consumes:
         - application/json
       produces:
@@ -229,7 +253,7 @@ paths:
     delete:
       tags:
         - user
-      summary: Delete the user
+      summary: Delete user
       consumes:
         - application/json
       produces:
@@ -247,10 +271,10 @@ paths:
           $ref: '#/responses/badRequest'
         403:
           $ref: '#/responses/forbidden'
-  /user/login:
+  /login:
     get:
       tags:
-        - user
+        - auth
       summary: Logs user into the system
       produces:
         - application/json
@@ -281,10 +305,10 @@ paths:
               description: date in UTC when token expires
         '400':
           description: Invalid username/password supplied
-  /user/logout:
+  /logout:
     get:
       tags:
-        - user
+        - auth
       summary: Logs out current logged in user session
       produces:
         - application/json
@@ -342,10 +366,10 @@ definitions:
   Comments:
     type: object
     required:
-      - postId
+      - id
       - comments
     properties:
-      postId:
+      id:
         type: string
         format: uuid
       comments:
