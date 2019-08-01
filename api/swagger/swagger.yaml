@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   title: Blog
 tags:
-  - name: posts
+  - name: post
     description: Posts related operations
   - name: user
     description: Operations about user
@@ -18,7 +18,7 @@ paths:
   /posts:
     post:
       tags:
-        - posts
+        - post
       summary: Add a new post to the store
       consumes:
         - application/json
@@ -33,14 +33,14 @@ paths:
             $ref: '#/definitions/Post'
       responses:
         201:
-          $ref: "#/responses/creted"  
+          $ref: "#/responses/created"  
         400:
           $ref: '#/responses/badRequest'
         403:
           $ref: '#/responses/forbidden'
     get:
       tags:
-        - posts
+        - post
       summary: Get all posts
       produces:
         - application/json
@@ -60,7 +60,7 @@ paths:
   /posts/{id}:        
     get:
       tags:
-        - posts
+        - post
       summary: Get post from the store
       produces:
         - application/json
@@ -84,7 +84,7 @@ paths:
           $ref: '#/responses/notFound'
     put:
       tags:
-        - posts
+        - post
       summary: Update post
       consumes:
         - application/json
@@ -111,7 +111,7 @@ paths:
           $ref: '#/responses/forbidden'
     delete:
       tags:
-        - posts
+        - post
       summary: Delete post from the store
       consumes:
         - application/json
@@ -134,7 +134,7 @@ paths:
   /posts/{id}/comments:        
     get:
       tags:
-        - posts
+        - post
       summary: Get post comments
       produces:
         - application/json
@@ -160,7 +160,7 @@ paths:
           $ref: '#/responses/notFound'
     post:
       tags:
-        - posts
+        - post
       summary: Add comment to post
       consumes:
         - application/json
@@ -187,7 +187,7 @@ paths:
           $ref: '#/responses/forbidden'
     delete:
       tags:
-        - posts
+        - post
       summary: Delete post comments
       consumes:
         - application/json
@@ -207,7 +207,7 @@ paths:
           $ref: '#/responses/badRequest'
         403:
           $ref: '#/responses/forbidden'
-  /user/{username}:
+  /user/{id}:
     get:
       tags:
         - user
@@ -215,9 +215,9 @@ paths:
       produces:
         - application/json
       parameters:
-      - name: username
+      - name: id
         in: path
-        description: The name that needs to be fetched.
+        description: The id that needs to be fetched.
         required: true
         type: string
       responses:
@@ -240,9 +240,9 @@ paths:
       produces:
         - application/json
       parameters:
-      - name: username
+      - name: id
         in: path
-        description: The name that needs to be fetched.
+        description: The id that needs to be fetched.
         required: true
         type: string
       responses:
@@ -261,9 +261,9 @@ paths:
       produces:
         - application/json
       parameters:
-      - name: username
+      - name: id
         in: path
-        description: The name that needs to be fetched.
+        description: The id that needs to be fetched.
         required: true
         type: string
       responses:
@@ -353,8 +353,8 @@ definitions:
       - postBody
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
+        format: uuid
       createdAt:
         type: string
         format: date
@@ -369,7 +369,7 @@ definitions:
     properties:
       body:
         type: string
-        format: I'm comment
+        example: I'm comment
       createdAt:
         type: string
         format: date
@@ -415,7 +415,7 @@ definitions:
 responses:
   ok:
     description: 'Ok'
-  creted:
+  created:
     description: 'Created'
   badRequest:
     description: Bad Request

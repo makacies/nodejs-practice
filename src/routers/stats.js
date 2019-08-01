@@ -3,7 +3,6 @@ var router = express.Router();
 const reader = require('../helpers/fileReader.js');
 const { POSTS_FILE_PATH, COMMENTS_FILE_PATH, AUTH_COOKIE_NAME } = require('../constants.js');
 const { Worker } = require('worker_threads')
-
 let stats = {};
 
 router.use(function timeLog(req, res, next) {
@@ -19,11 +18,7 @@ router
     });
 
 function getSingleArrayOfComments(comments) {
-    let singleArray = [];
-    comments.map(item => {
-        item.comments.map(comment => singleArray.push(comment))
-    });
-    return singleArray;
+    return comments.reduce((item, item1) => item.comments.concat(item1.comments))
 }
 
 function calculateStats() {

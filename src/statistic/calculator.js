@@ -1,6 +1,6 @@
-const DAY_MS = 8.64e+7;
-const WEEK_MS = 6.048e+8;
-const MONTH_MS = 2.628e+9;
+const DAY_MS = 24*60*60*1000;
+const WEEK_MS = DAY_MS*7;
+const MONTH_MS = WEEK_MS*4.3;
 
 function getFrequencyForThePeriod(posts, period, today) {
     return posts.filter(post => new Date(today - period) < post.createdAt).length;
