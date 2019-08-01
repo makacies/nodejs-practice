@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const { AUTH_COOKIE_NAME } = require('../constants.js');
+const handler = require('../helpers/storageObjectsHandler');
+const { USERS_FILE_PATH, AUTH_COOKIE_NAME } = require('../constants.js');
 
 router.use(function timeLog(req, res, next) {
     if (req.cookies[AUTH_COOKIE_NAME]) {
@@ -9,15 +10,21 @@ router.use(function timeLog(req, res, next) {
 });
 
 router
-    .route('/:username')
+    .route('/:id')
     .get(function (req, res) {
-        res.send('Not implemented yet')
+        res.send(handler.getElementFromCollection(USERS_FILE_PATH, req.params.id));
+    })
+    .post(function (req, res) {
+        handler.addElementToCollection(USERS_FILE_PATH, req.body);
+        res.send('Posted');
     })
     .put(function (req, res) {
-        res.send('Not implemented yet')
+        handler.updateElementInCollection(USERS_FILE_PATH, req.params.id, req.body);
+        res.send('Updated');
     })
     .delete(function (req, res) {
-        res.send('Not implemented yet')
+        handler.deleteElementFromCollection(USERS_FILE_PATH, req.params.id);
+        res.send('Removed');
     });
 
 module.exports = router;

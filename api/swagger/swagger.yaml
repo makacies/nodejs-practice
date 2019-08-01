@@ -231,6 +231,32 @@ paths:
           $ref: '#/responses/forbidden'
         404:
           $ref: '#/responses/notFound'
+    post:
+      tags:
+        - user
+      summary: Update user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: The id that needs to be fetched.
+        required: true
+        type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        201:
+          $ref: "#/responses/created"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
     put:
       tags:
         - user
@@ -245,6 +271,11 @@ paths:
         description: The id that needs to be fetched.
         required: true
         type: string
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/User'
       responses:
         200:
           $ref: "#/responses/ok"  
@@ -331,8 +362,8 @@ definitions:
     type: object
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
+        format: uuid
       username:
         type: string
       firstName:
@@ -349,10 +380,14 @@ definitions:
     type: object
     required:
       - id
+      - userId
       - createdAt
       - postBody
     properties:
       id:
+        type: string
+        format: uuid
+      userId:
         type: string
         format: uuid
       createdAt:
