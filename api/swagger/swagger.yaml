@@ -231,6 +231,8 @@ paths:
           $ref: '#/responses/forbidden'
         404:
           $ref: '#/responses/notFound'
+        500:
+          $ref: '#/responses/serverError'
     post:
       tags:
         - user
@@ -257,6 +259,8 @@ paths:
           $ref: '#/responses/badRequest'
         403:
           $ref: '#/responses/forbidden'
+        500:
+          $ref: '#/responses/serverError'
     put:
       tags:
         - user
@@ -283,6 +287,8 @@ paths:
           $ref: '#/responses/badRequest'
         403:
           $ref: '#/responses/forbidden'
+        500:
+          $ref: '#/responses/serverError'
     delete:
       tags:
         - user
@@ -304,6 +310,8 @@ paths:
           $ref: '#/responses/badRequest'
         403:
           $ref: '#/responses/forbidden'
+        500:
+          $ref: '#/responses/serverError'
   /login:
     get:
       tags:
@@ -449,9 +457,9 @@ definitions:
         format: int32
 responses:
   ok:
-    description: 'Ok'
+    description: Ok
   created:
-    description: 'Created'
+    description: Created
   badRequest:
     description: Bad Request
     examples:
@@ -459,6 +467,8 @@ responses:
         - message: Payload violates Schema
         - message: Payload Invalid
   forbidden:
-    description: 'Forbidden'
+    description: Forbidden
   notFound:
-    description: 'Not found'
+    description: Not found
+  serverError:
+    description: Internal Server Error        

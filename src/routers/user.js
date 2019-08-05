@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const handler = require('../helpers/storageObjectsHandler');
-const { USERS_FILE_PATH, AUTH_COOKIE_NAME } = require('../constants.js');
+const router = require('express').Router();
+const { AUTH_COOKIE_NAME } = require('../constants.js');
+const { Connection } = require('../db/connection.js');
+const COLLECTION_NAME = 'users';
 
 router.use(function timeLog(req, res, next) {
     if (req.cookies[AUTH_COOKIE_NAME]) {
@@ -11,20 +11,62 @@ router.use(function timeLog(req, res, next) {
 
 router
     .route('/:id')
-    .get(function (req, res) {
-        res.send(handler.getElementFromCollection(USERS_FILE_PATH, req.params.id));
+    .get(async function (req, res) {
+        try {
+            var documents = await Connection.db.collection(COLLECTION_NAME).find({
+                '_id_': req.body.id
+            }).toArray();
+
+            if (documents.length === 0) {
+                return res.status(404).json({});
+            }
+
+            res.status(200).json(documents[0]);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .post(function (req, res) {
-        handler.addElementToCollection(USERS_FILE_PATH, req.body);
-        res.send('Posted');
+    .post(async function (req, res) {
+        try {
+            await Connection.db.collection(COLLECTION_NAME).insertOne(req.body);
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .put(function (req, res) {
-        handler.updateElementInCollection(USERS_FILE_PATH, req.params.id, req.body);
-        res.send('Updated');
+    .put(async function (req, res) {
+        try {
+            await Connection.db.collection(COLLECTION_NAME).updateOne({
+                '_id_': req.body.id
+            }, {
+                $set: {
+                    username: req.body.username,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    phone: req.body.phone,
+                    email: req.body.email
+                }
+            }, {
+                upsert: true
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .delete(function (req, res) {
-        handler.deleteElementFromCollection(USERS_FILE_PATH, req.params.id);
-        res.send('Removed');
+    .delete(async function (req, res) {
+        try {
+            await Connection.db.collection(COLLECTION_NAME).deleteOne({
+                '_id_': req.body.id
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     });
 
 module.exports = router;

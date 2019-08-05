@@ -1,23 +1,23 @@
 [{
-        "id": "cfec8de7-f00d-4e90-8659-8a3d4f365474",
+        "_id": "cfec8de7-f00d-4e90-8659-8a3d4f365474",
         "userId": "2671a55a-6620-4959-b185-2eb909b91d2e",
         "createdAt": "2019-07-08T20:52:21.346Z",
         "postBody": "Aaaa"
     },
     {
-        "id": "cb121d17-cf5b-4f2a-be63-0e5b26b91d08",
+        "_id": "cb121d17-cf5b-4f2a-be63-0e5b26b91d08",
         "userId": "2671a55a-6620-4959-b185-2eb909b91d2e",
         "createdAt": "2019-07-26T21:52:21.346Z",
         "postBody": "Bbbb"
     },
     {
-        "id": "5673fde5-5594-4d7f-8882-b3db2e3db866",
+        "_id": "5673fde5-5594-4d7f-8882-b3db2e3db866",
         "userId": "2671a55a-6620-4959-b185-2eb909b91d2e",
         "createdAt": "2019-07-08T20:52:21.346Z",
         "postBody": "Cccc"
     },
     {
-        "id": "df45ee42-283d-4438-b716-ab4ff13ce0d8",
+        "_id": "df45ee42-283d-4438-b716-ab4ff13ce0d8",
         "userId": "a6e3fc12-ff34-454b-92b0-43604b549797",
         "createdAt": "2019-06-12T20:52:21.346Z",
         "postBody": "Dddd"
