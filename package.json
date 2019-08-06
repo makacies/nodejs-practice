@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "test"
+    "start": "nodemon --inspect --experimental-worker src/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/makacies/nodejs-practice/issues"
   },
-  "homepage": "https://github.com/makacies/nodejs-practice#readme"
+  "homepage": "https://github.com/makacies/nodejs-practice#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.1",
+    "js-yaml": "^3.13.1",
+    "md5": "^2.2.1",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^1.19.1",
+    "swagger-ui-express": "^4.0.7",
+    "url": "^0.11.0"
+  }
 }

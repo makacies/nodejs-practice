@@ -1,0 +1,429 @@
+swagger: '2.0'
+info:
+  description: Blog api
+  version: 1.0.0
+  title: Blog
+tags:
+  - name: post
+    description: Posts related operations
+  - name: user
+    description: Operations about user
+  - name: auth
+    description: User authentication
+  - name: statistic
+    description: Statistic
+schemes:
+  - http
+paths:
+  /posts:
+    post:
+      tags:
+        - post
+      summary: Add a new post to the store
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Post object that needs to be added to the store
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+      responses:
+        201:
+          $ref: "#/responses/created"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+    get:
+      tags:
+        - post
+      summary: Get all posts
+      produces:
+        - application/json
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Post'
+          description: Posts
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+  /posts/{id}:        
+    get:
+      tags:
+        - post
+      summary: Get post from the store
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/Post'
+          description: Post
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+    put:
+      tags:
+        - post
+      summary: Update post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Post'
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+    delete:
+      tags:
+        - post
+      summary: Delete post from the store
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+  /posts/{id}/comments:        
+    get:
+      tags:
+        - post
+      summary: Get post comments
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Comments'
+          description: ''
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+    post:
+      tags:
+        - post
+      summary: Add comment to post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Comment'
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+    delete:
+      tags:
+        - post
+      summary: Delete post comments
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: Post id
+        type: string
+        format: uuid
+        required: true
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+  /user/{id}:
+    get:
+      tags:
+        - user
+      summary: Get user by user name
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: The id that needs to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/User'
+          description: Successful operation
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+        404:
+          $ref: '#/responses/notFound'
+    put:
+      tags:
+        - user
+      summary: Update user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: The id that needs to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: id
+        in: path
+        description: The id that needs to be fetched.
+        required: true
+        type: string
+      responses:
+        200:
+          $ref: "#/responses/ok"  
+        400:
+          $ref: '#/responses/badRequest'
+        403:
+          $ref: '#/responses/forbidden'
+  /login:
+    get:
+      tags:
+        - auth
+      summary: Logs user into the system
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: query
+          description: The user name for login
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          type: string
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/User'
+          description: Successful operation
+        400:
+          $ref: '#/responses/badRequest'
+  /logout:
+    get:
+      tags:
+        - auth
+      summary: Logs out current logged in user session
+      produces:
+        - application/json
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/User'
+          description: Successful operation
+        400:
+          $ref: '#/responses/badRequest'
+  /stats:
+    get:
+      tags:
+        - statistic
+      summary: Get posts and comments statistics
+      produces:
+        - application/json
+      responses:
+        200:
+          schema:
+            $ref: '#/definitions/Statistics'
+          description: Posts and comments statistics
+        400:
+          $ref: '#/responses/badRequest'
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+  Post:
+    type: object
+    required:
+      - id
+      - createdAt
+      - postBody
+    properties:
+      id:
+        type: string
+        format: uuid
+      createdAt:
+        type: string
+        format: date
+      postBody:
+        type: string
+        example: doggie
+  Comment:
+    type: object
+    required:
+      - body
+      - createdAt
+    properties:
+      body:
+        type: string
+        example: I'm comment
+      createdAt:
+        type: string
+        format: date
+  Comments:
+    type: object
+    required:
+      - id
+      - comments
+    properties:
+      id:
+        type: string
+        format: uuid
+      comments:
+        type: array
+        items:
+          $ref: '#/definitions/Comment'
+  Statistics:
+    type: object
+    required:
+      - postsStats
+      - commentsStats
+    properties:
+      postsStats:
+        $ref: '#/definitions/Frequency'
+      commentsStats:
+        $ref: '#/definitions/Frequency'
+  Frequency:
+    type: object
+    required:
+      - perDay
+      - perWeek
+      - perMonth
+    properties:
+      perDay:
+        type: integer
+        format: int32
+      perWeek:
+        type: integer
+        format: int32
+      perMonth:
+        type: integer
+        format: int32
+responses:
+  ok:
+    description: 'Ok'
+  created:
+    description: 'Created'
+  badRequest:
+    description: Bad Request
+    examples:
+      application/json:
+        - message: Payload violates Schema
+        - message: Payload Invalid
+  forbidden:
+    description: 'Forbidden'
+  notFound:
+    description: 'Not found'
