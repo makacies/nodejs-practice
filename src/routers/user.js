@@ -14,7 +14,7 @@ router
     .get(async function (req, res) {
         try {
             var documents = await Connection.db.collection(COLLECTION_NAME).find({
-                '_id_': req.body.id
+                id: req.params.id
             }).toArray();
 
             if (documents.length === 0) {
@@ -39,7 +39,7 @@ router
     .put(async function (req, res) {
         try {
             await Connection.db.collection(COLLECTION_NAME).updateOne({
-                '_id_': req.body.id
+                id: req.params.id
             }, {
                 $set: {
                     username: req.body.username,
@@ -60,7 +60,7 @@ router
     .delete(async function (req, res) {
         try {
             await Connection.db.collection(COLLECTION_NAME).deleteOne({
-                '_id_': req.body.id
+                id: req.params.id
             });
             res.status(200).json({});
         } catch (err) {
