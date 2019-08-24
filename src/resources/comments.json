@@ -1,22 +1,11 @@
 [{
-    "id": "cfec8de7-f00d-4e90-8659-8a3d4f365474",
-    "comments": [{
-        "body": "hi",
-        "createdAt": "2019-06-30"
-    }, {
-        "body": "hello",
-        "createdAt": "2019-07-25"
-    }, {
-        "body": "!!!",
-        "createdAt": "2019-07-25"
-    }]
-}, {
-    "id": "cb121d17-cf5b-4f2a-be63-0e5b26b91d08",
-    "comments": [{
-        "body": "wow",
-        "createdAt": "2019-07-25"
-    }, {
-        "body": "no way",
-        "createdAt": "2019-07-25"
-    }]
+    "postId" : "cfec8de7-f00d-4e90-8659-8a3d4f365474",
+    "body" : "!!!",
+    "createdAt" : "2019-07-08T20:52:21.346Z",
+    "updatedAt" : "2019-07-08T20:52:21.346Z"
+},{
+    "postId" : "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "body" : "111",
+    "createdAt" : "2019-07-12T20:52:21.346Z",
+    "updatedAt" : "2019-07-12T20:52:21.346Z"
 }]

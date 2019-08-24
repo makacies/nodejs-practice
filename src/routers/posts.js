@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const handler = require('../helpers/storageObjectsHandler');
-const { POSTS_FILE_PATH, COMMENTS_FILE_PATH, AUTH_COOKIE_NAME } = require('../constants.js');
+const router = require('express').Router();
+const { AUTH_COOKIE_NAME } = require('../constants.js');
+const { Connection } = require('../db/connection.js');
+const POSTS_COLLECTION_NAME = 'posts';
+const COMMENTS_COLLECTION_NAME = 'comments';
 
 router.use(function timeLog(req, res, next) {
     if (req.cookies[AUTH_COOKIE_NAME]) {
@@ -11,40 +12,143 @@ router.use(function timeLog(req, res, next) {
 
 router
     .route('/')
-    .get(function (req, res) {
-        res.send(handler.getAllElements(POSTS_FILE_PATH));
+    .get(async function (req, res) {
+        try {
+            var documents = await Connection.db.collection(POSTS_COLLECTION_NAME).find().toArray();
+
+            if (documents.length === 0) {
+                return res.status(404).json({});
+            }
+
+            res.status(200).json(documents);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .post(function (req, res) {
-        handler.addElementToCollection(POSTS_FILE_PATH, req.body);
-        res.send('Posted');
+    .post(async function (req, res) {
+        try {
+            await Connection.db.collection(POSTS_COLLECTION_NAME).insertOne({
+                ...req.body,
+                createdAt: new Date()
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     });
 
 router
     .route('/:id')
-    .get(function (req, res) {
-        res.send(handler.getElementFromCollection(POSTS_FILE_PATH, req.params.id));
+    .get(async function (req, res) {
+        try {
+            var documents = await Connection.db.collection(POSTS_COLLECTION_NAME).find({
+                id: req.params.id
+            }).toArray();
+
+            if (documents.length === 0) {
+                return res.status(404).json({});
+            }
+
+            res.status(200).json(documents[0]);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .put(function (req, res) {
-        handler.updateElementInCollection(POSTS_FILE_PATH, req.params.id, req.body);
-        res.send('Updated');
+    .put(async function (req, res) {
+        try {
+            await Connection.db.collection(POSTS_COLLECTION_NAME).updateOne({
+                id: req.params.id
+            }, {
+                $set: {
+                    postBody: req.body.postBody
+                },
+                $currentDate: {
+                    updatedAt: true
+                }
+            }, {
+                upsert: true
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .delete(function (req, res) {
-        handler.deleteElementFromCollection(POSTS_FILE_PATH, req.params.id);
-        res.send('Removed');
+    .delete(async function (req, res) {
+        try {
+            await Connection.db.collection(POSTS_COLLECTION_NAME).deleteOne({
+                id: req.params.id
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     });
 
 router
     .route('/:id/comments')
-    .get(function (req, res) {
-        res.send(handler.getElementFromCollection(COMMENTS_FILE_PATH, req.params.id));
+    .get(async function (req, res) {
+        try {
+            var documents = await Connection.db.collection(COMMENTS_COLLECTION_NAME).find({
+                postId: req.params.id
+            }).toArray();
+
+            if (documents.length === 0) {
+                return res.status(404).json({});
+            }
+
+            res.status(200).json(documents);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .post(function (req, res) {
-        handler.addElementToCollection(COMMENTS_FILE_PATH, req.body, 'comments', req.params.id);
-        res.send('Posted');
+    .post(async function (req, res) {
+        try {
+            await Connection.db.collection(COMMENTS_COLLECTION_NAME).insertOne({
+                ...req.body,
+                createdAt: new Date()
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     })
-    .delete(function (req, res) {
-        handler.deleteElementFromCollection(COMMENTS_FILE_PATH, req.params.id);
-        res.send('Removed');
+    .put(async function (req, res) {
+        try {
+            await Connection.db.collection(COMMENTS_COLLECTION_NAME).updateOne({
+                postId: req.params.id
+            }, {
+                $set: {
+                    body: req.body.body
+                },
+                $currentDate: {
+                    updatedAt: true
+                }
+            }, {
+                upsert: true
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
+    })
+    .delete(async function (req, res) {
+        try {
+            await Connection.db.collection(COMMENTS_COLLECTION_NAME).deleteOne({
+                postId: req.params.id
+            });
+            res.status(200).json({});
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({});
+        }
     });
 
 module.exports = router;

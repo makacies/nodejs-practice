@@ -1,5 +1,4 @@
-var express = require('express');
-var router = express.Router();
+var router = require('express').Router();
 const reader = require('../helpers/fileReader.js');
 const { POSTS_FILE_PATH, COMMENTS_FILE_PATH, AUTH_COOKIE_NAME } = require('../constants.js');
 const { Worker } = require('worker_threads')
@@ -17,14 +16,10 @@ router
         res.send(stats)
     });
 
-function getSingleArrayOfComments(comments) {
-    return comments.reduce((item, item1) => item.comments.concat(item1.comments))
-}
-
 function calculateStats() {
     const rawData = {
         posts: JSON.parse(reader.readFile(POSTS_FILE_PATH)),
-        comments: getSingleArrayOfComments(JSON.parse(reader.readFile(COMMENTS_FILE_PATH)))
+        comments: JSON.parse(reader.readFile(COMMENTS_FILE_PATH))
     }
     const worker = new Worker('./src/statistic/worker.js', {
         workerData: rawData
